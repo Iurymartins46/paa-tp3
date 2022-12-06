@@ -1,5 +1,5 @@
 compile:
-	gcc  -lm -o exefile.out
+	gcc src/main.c src/similaridade.c  -lm -o exefile.out
 
 run:
 	./exefile.out

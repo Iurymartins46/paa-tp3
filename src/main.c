@@ -1,3 +1,4 @@
+#include "similaridade.h"
 
 
 int main(){
