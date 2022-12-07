@@ -19,6 +19,8 @@ double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quan
 
 char** escolhePadroes(ProdutoCartesianoBases *produtoCartesianoBases, int n, int quantidadeTotalProdutosCartesianos, int tamanhoProdutoCartesiano);
 
+void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesDNA, int arquivo);
+
 
 void inserirProdutoCartesianoBases(char **padrao, char *resultadoProdutoCartesiano){
     (*padrao) = (char*)malloc(sizeof(char));
@@ -145,7 +147,8 @@ double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quan
     for(i = 0; i < quantidadeSimulacoes; i++){
         inicializaSimilaridade(&similaridade, n);
         padroesDNA = escolhePadroes(produtoCartesianoBases, n, quantidadeTotalProdutosCartesianos, tamanhoProdutoCartesiano);
-        // Aqui que vai chamar as funções que faltão
+        leituraDados(&similaridade, arquivoDNA1, padroesDNA, 1);
+        leituraDados(&similaridade, arquivoDNA2, padroesDNA, 2);
         totalSimilaridade += calculaSimilaridade(&similaridade);
         free(&(similaridade.vetorA));
         free(&(similaridade.vetorB));
@@ -153,3 +156,16 @@ double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quan
     return totalSimilaridade / quantidadeSimulacoes;
 }
 
+void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesDNA, int arquivo){
+    char DNA[20000];
+    FILE *file;
+    file = fopen(nomeArquivo, "r");
+    if(file == NULL){
+        printf("\nErro na abertura do arquivo de entrada !!!!!!!!\n\n");
+        exit(1);
+    }
+    while (fscanf(file, "%s", &DNA) != EOF){
+        // Chamar o algorito que verifica padroes, e outras funções se necessario
+    }
+    fclose(file);
+}
