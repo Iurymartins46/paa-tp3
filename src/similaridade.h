@@ -10,3 +10,9 @@ typedef struct{
     int *vetorB;
     int n;
 }Similaridade;
+
+double calculaSimilaridadeHumanoChimpanze(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano);
+
+double calculaSimilaridadeHumanoCachorro(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano);
+
+double calculaSimilaridadeChimpanzeCachorro(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano);
