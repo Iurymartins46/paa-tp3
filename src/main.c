@@ -2,6 +2,11 @@
 
 
 int main(){
-    printf("%.15lf\n", calculaSimilaridadeHumanoChimpanze(2, 4, 2));
+    printf("-------------------------------------------------------------------------------------------\n");
+    printf("%.15lf\n", calculaSimilaridadeHumanoChimpanze(1, 4, 10));
+    printf("-------------------------------------------------------------------------------------------\n");
+    printf("%.15lf\n", calculaSimilaridadeHumanoCachorro(1, 4, 10));
+    printf("-------------------------------------------------------------------------------------------\n");
+    printf("%.15lf\n", calculaSimilaridadeChimpanzeCachorro(1, 4, 10));
     return 0;
 }
