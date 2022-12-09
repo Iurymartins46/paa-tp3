@@ -17,10 +17,15 @@ int maximo(int a, int b);
 
 void badCharHeuristic(char *str, int size, int badchar[NO_OF_CHARS]);
 
-int search( char *txt,  char *pat);
+int boyerMooreSearch( char *txt,  char *pat);
 
 void algoritimoBoyerMoore(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo);
 
+void algoritimoKnuthMorrisPratt(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo);
+
+int KMPSearch(char* pat, char* txt);
+
+void computeLPSArray(char* pat, int M, int* lps);
 
 
 char** escolhePadroes(int n, int tamanhoProdutoCartesiano){
@@ -76,8 +81,6 @@ char** escolhePadroes(int n, int tamanhoProdutoCartesiano){
 }
 
 void inicializaSimilaridade(Similaridade *similaridade, int n){
-    //free(similaridade->vetorA);
-    //free(similaridade->vetorB);
     similaridade->n = n;
     similaridade->vetorA = (int*)calloc(n, sizeof(int));
     similaridade->vetorB = (int*)calloc(n, sizeof(int));
@@ -159,7 +162,7 @@ void algoritimoBoyerMoore(Similaridade *similaridade, char *DNA, char **padroesD
     int i;
     int quantidadeOcorrencias;
     for(i = 0; i < similaridade->n; i++){
-        quantidadeOcorrencias = search(DNA, padroesDNA[i]);
+        quantidadeOcorrencias = boyerMooreSearch(DNA, padroesDNA[i]);
         if(arquivo == 1){
             similaridade->vetorA[i] += quantidadeOcorrencias;
         }
@@ -183,7 +186,7 @@ void badCharHeuristic( char *str, int size, int badchar[NO_OF_CHARS]){
     }
 }
  
-int search( char *txt,  char *pat){
+int boyerMooreSearch( char *txt,  char *pat){
     int quantidadeOcorrencias = 0;
     int m = strlen(pat);
     int n = strlen(txt);
@@ -204,4 +207,69 @@ int search( char *txt,  char *pat){
         }
     }
     return quantidadeOcorrencias;
+}
+
+//------------------------------ Implementação do algoritimo  Knuth-Morris-Pratt ------------------------------
+
+void algoritimoKnuthMorrisPratt(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo){
+    int i;
+    int quantidadeOcorrencias;
+    for(i = 0; i < similaridade->n; i++){
+        quantidadeOcorrencias = KMPSearch(DNA, padroesDNA[i]);
+        if(arquivo == 1){
+            similaridade->vetorA[i] += quantidadeOcorrencias;
+        }
+        else{
+            similaridade->vetorB[i] += quantidadeOcorrencias;
+        }
+    }
+}
+
+int KMPSearch(char* pat, char* txt){
+    int quantidadeOcorrencias = 0;
+    int M = strlen(pat);
+    int N = strlen(txt);
+    int *lps = (int*)malloc(M * sizeof(int));
+    computeLPSArray(pat, M, lps);
+    int i = 0;
+    int j = 0;
+    while ((N - i) >= (M - j)) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == M) {
+            quantidadeOcorrencias += 1;
+            j = lps[j - 1];
+        }
+        else if (i < N && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+    return quantidadeOcorrencias;
+}
+
+void computeLPSArray(char* pat, int M, int* lps){
+    int len = 0;
+    lps[0] = 0;
+    int i = 1;
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        }
+        else{
+            if (len != 0) {
+                len = lps[len - 1];
+            }
+            else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
 }
