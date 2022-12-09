@@ -7,11 +7,11 @@ void inicializaSimilaridade(Similaridade *similaridade, int n);
 
 double calculaSimilaridade(Similaridade *similaridade);
 
-double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano);
+double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano, int algoritmo);
 
 char** escolhePadroes(int n, int tamanhoProdutoCartesiano);
 
-void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesDNA, int arquivo);
+void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesDNA, int arquivo, int algoritmo);
 
 int maximo(int a, int b);
 
@@ -19,9 +19,9 @@ void badCharHeuristic(char *str, int size, int badchar[NO_OF_CHARS]);
 
 int boyerMooreSearch( char *txt,  char *pat);
 
-void algoritimoBoyerMoore(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo);
+void algoritmoBoyerMoore(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo);
 
-void algoritimoKnuthMorrisPratt(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo);
+void algoritmoKnuthMorrisPratt(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo);
 
 int KMPSearch(char* pat, char* txt);
 
@@ -106,44 +106,84 @@ double calculaSimilaridade(Similaridade *similaridade){
     return (aux / auxMultiplicacaoNorma);
 }
 
-double calculaSimilaridadeHumanoChimpanze(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+double calculaSimilaridadeHumanoChimpanzeAlgoritmoBoyerMoore(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
     char arquivoDNAHumano[50] = "tests/human.txt";
     char arquivoDNAChimpanze[50] = "tests/chimpanzee.txt";
-    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNAChimpanze, quantidadeSimulacoes, n, tamanhoProdutoCartesiano);
+    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNAChimpanze, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 1);
     return 0;
 }
 
-double calculaSimilaridadeHumanoCachorro(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+double calculaSimilaridadeHumanoCachorroAlgoritmoBoyerMoore(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
     char arquivoDNAHumano[50] = "tests/human.txt";
     char arquivoDNACachorro[50] = "tests/dog.txt";
-    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano);
+    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 1);
 }
 
-double calculaSimilaridadeChimpanzeCachorro(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+double calculaSimilaridadeChimpanzeCachorroAlgoritmoBoyerMoore(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
     char arquivoDNAChimpanze[50] = "tests/chimpanzee.txt";
     char arquivoDNACachorro[50] = "tests/dog.txt";
-    return calculaSimilaridadeInterna(arquivoDNAChimpanze, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano);
+    return calculaSimilaridadeInterna(arquivoDNAChimpanze, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 1);
 }
 
-double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+double calculaSimilaridadeHumanoChimpanzeAlgoritmoKnuthMorrisPratt(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+    char arquivoDNAHumano[50] = "tests/human.txt";
+    char arquivoDNAChimpanze[50] = "tests/chimpanzee.txt";
+    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNAChimpanze, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 2);
+    return 0;
+}
+
+double calculaSimilaridadeHumanoCachorroAlgoritmoKnuthMorrisPratt(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+    char arquivoDNAHumano[50] = "tests/human.txt";
+    char arquivoDNACachorro[50] = "tests/dog.txt";
+    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 2);
+}
+
+double calculaSimilaridadeChimpanzeCachorroAlgoritmoKnuthMorrisPratt(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+    char arquivoDNAChimpanze[50] = "tests/chimpanzee.txt";
+    char arquivoDNACachorro[50] = "tests/dog.txt";
+    return calculaSimilaridadeInterna(arquivoDNAChimpanze, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 2);
+}
+
+double calculaSimilaridadeHumanoChimpanzeAlgoritmoShiftAnd(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+    char arquivoDNAHumano[50] = "tests/human.txt";
+    char arquivoDNAChimpanze[50] = "tests/chimpanzee.txt";
+    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNAChimpanze, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 3);
+    return 0;
+}
+
+double calculaSimilaridadeHumanoCachorroAlgoritmoShiftAnd(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+    char arquivoDNAHumano[50] = "tests/human.txt";
+    char arquivoDNACachorro[50] = "tests/dog.txt";
+    return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 3);
+}
+
+double calculaSimilaridadeChimpanzeCachorroAlgoritmoShiftAnd(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
+    char arquivoDNAChimpanze[50] = "tests/chimpanzee.txt";
+    char arquivoDNACachorro[50] = "tests/dog.txt";
+    return calculaSimilaridadeInterna(arquivoDNAChimpanze, arquivoDNACachorro, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 3);
+}
+
+double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano, int algoritmo){
     double totalSimilaridade = 0;
     int i;
     char **padroesDNA;
     Similaridade similaridade;
-    srand(time(NULL));
     for(i = 0; i < quantidadeSimulacoes; i++){
         inicializaSimilaridade(&similaridade, n);
         padroesDNA = escolhePadroes(n, tamanhoProdutoCartesiano);
-        leituraDados(&similaridade, arquivoDNA1, padroesDNA, 1);
-        leituraDados(&similaridade, arquivoDNA2, padroesDNA, 2);
-        totalSimilaridade = calculaSimilaridade(&similaridade);
+        leituraDados(&similaridade, arquivoDNA1, padroesDNA, 1, algoritmo);
+        leituraDados(&similaridade, arquivoDNA2, padroesDNA, 2, algoritmo);
+        totalSimilaridade += calculaSimilaridade(&similaridade);
         free(&(similaridade.vetorA));
         free(&(similaridade.vetorB));
     }
     return totalSimilaridade / quantidadeSimulacoes;
 }
 
-void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesDNA, int arquivo){
+// A variavel do tipo int 'arquivo' se comporta como uma fleg:
+// 1 representa que esta lendo o arquivoDNA1, e os dados extraidos serão gardados no vetorA
+// 2 representa que esta lendo o arquivoDNA2, e os dados extraidos serão gardados no vetorB
+void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesDNA, int arquivo, int algoritmo){
     char DNA[20000];
     FILE *file;
     file = fopen(nomeArquivo, "r");
@@ -151,14 +191,26 @@ void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesD
         printf("\nErro na abertura do arquivo de entrada !!!!!!!!\n\n");
         exit(1);
     }
-    while (fscanf(file, "%s", &DNA) != EOF){
-        algoritimoBoyerMoore(similaridade, DNA, padroesDNA, arquivo);
+    if(algoritmo == 1){
+        while (fscanf(file, "%s", &DNA) != EOF){
+            algoritmoBoyerMoore(similaridade, DNA, padroesDNA, arquivo);
+        }
+    }
+    else if(algoritmo == 2){
+        while (fscanf(file, "%s", &DNA) != EOF){
+            algoritmoKnuthMorrisPratt(similaridade, DNA, padroesDNA, arquivo);
+        }
+    }
+    else if(algoritmo == 3){
+        while (fscanf(file, "%s", &DNA) != EOF){
+
+        }
     }
     fclose(file);
 }
 
 //--------------------------------- Implementação do algoritimo Boyer-Moore ---------------------------------
-void algoritimoBoyerMoore(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo){
+void algoritmoBoyerMoore(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo){
     int i;
     int quantidadeOcorrencias;
     for(i = 0; i < similaridade->n; i++){
@@ -211,11 +263,11 @@ int boyerMooreSearch( char *txt,  char *pat){
 
 //------------------------------ Implementação do algoritimo  Knuth-Morris-Pratt ------------------------------
 
-void algoritimoKnuthMorrisPratt(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo){
+void algoritmoKnuthMorrisPratt(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo){
     int i;
     int quantidadeOcorrencias;
     for(i = 0; i < similaridade->n; i++){
-        quantidadeOcorrencias = KMPSearch(DNA, padroesDNA[i]);
+        quantidadeOcorrencias = KMPSearch(padroesDNA[i], DNA);
         if(arquivo == 1){
             similaridade->vetorA[i] += quantidadeOcorrencias;
         }
@@ -273,3 +325,5 @@ void computeLPSArray(char* pat, int M, int* lps){
         }
     }
 }
+
+//----------------------------------- Implementação do algoritimo Shift-And  -----------------------------------
