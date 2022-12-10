@@ -26,8 +26,8 @@ int main(){
     clock_t tempoFinalAlgoritmoShiftAnd = clock();
 
     printf("\n------- Tempo de Execucao de cada Algoritmo ------\n");
-    printf("BoyerMoore: %f s\n", ((float)(tempoFinalBoyerMoore-tempoIncialBoyerMoore)) / (CLOCKS_PER_SEC));
-    printf("KnuthMorrisPratt: %f s\n", ((float)(tempoFinalKnuthMorrisPratt-tempoIncialKnuthMorrisPratt)) /(CLOCKS_PER_SEC));
-    printf("ShiftAnd: %f s\n", ((float)(tempoFinalAlgoritmoShiftAnd-tempoIncialAlgoritmoShiftAnd)) /(CLOCKS_PER_SEC));
+    printf("Boyer Moore: %.2lf s\n", ((float)(tempoFinalBoyerMoore-tempoIncialBoyerMoore)) / (CLOCKS_PER_SEC));
+    printf("KnuthMorrisPratt: %.2lf s\n", ((float)(tempoFinalKnuthMorrisPratt-tempoIncialKnuthMorrisPratt)) /(CLOCKS_PER_SEC));
+    printf("Shift And: %.2lf s\n", ((float)(tempoFinalAlgoritmoShiftAnd-tempoIncialAlgoritmoShiftAnd)) /(CLOCKS_PER_SEC));
     return 0;
 }
