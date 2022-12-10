@@ -13,6 +13,8 @@ char** escolhePadroes(int n, int tamanhoProdutoCartesiano);
 
 void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesDNA, int arquivo, int algoritmo);
 
+void funcaoFree(int **poenteiro);
+
 int maximo(int a, int b);
 
 void badCharHeuristic(char *str, int size, int badchar[NO_OF_CHARS]);
@@ -165,6 +167,7 @@ double calculaSimilaridadeChimpanzeCachorroAlgoritmoShiftAnd(int quantidadeSimul
 
 double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano, int algoritmo){
     double totalSimilaridade = 0;
+    double tot;
     int i;
     char **padroesDNA;
     Similaridade similaridade;
@@ -174,10 +177,14 @@ double calculaSimilaridadeInterna(char *arquivoDNA1, char *arquivoDNA2, int quan
         leituraDados(&similaridade, arquivoDNA1, padroesDNA, 1, algoritmo);
         leituraDados(&similaridade, arquivoDNA2, padroesDNA, 2, algoritmo);
         totalSimilaridade += calculaSimilaridade(&similaridade);
-        free(&(similaridade.vetorA));
-        free(&(similaridade.vetorB));
+        funcaoFree(&similaridade.vetorA);
+        funcaoFree(&similaridade.vetorB);
     }
     return totalSimilaridade / quantidadeSimulacoes;
+}
+
+void funcaoFree(int **poenteiro){
+    free((*poenteiro));
 }
 
 // A variavel do tipo int 'arquivo' se comporta como uma fleg:
