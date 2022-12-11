@@ -29,6 +29,9 @@ int KMPSearch(char* pat, char* txt);
 
 void computeLPSArray(char* pat, int M, int* lps);
 
+void algoritmoShiftAnd(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo);
+
+int searchShiftAnd(char *texto, char *padrao);
 
 char** escolhePadroes(int n, int tamanhoProdutoCartesiano){
     int i, j, posicao;
@@ -131,7 +134,6 @@ double calculaSimilaridadeHumanoChimpanzeAlgoritmoKnuthMorrisPratt(int quantidad
     char arquivoDNAHumano[50] = "tests/human.txt";
     char arquivoDNAChimpanze[50] = "tests/chimpanzee.txt";
     return calculaSimilaridadeInterna(arquivoDNAHumano, arquivoDNAChimpanze, quantidadeSimulacoes, n, tamanhoProdutoCartesiano, 2);
-    return 0;
 }
 
 double calculaSimilaridadeHumanoCachorroAlgoritmoKnuthMorrisPratt(int quantidadeSimulacoes, int n, int tamanhoProdutoCartesiano){
@@ -210,7 +212,7 @@ void leituraDados(Similaridade *similaridade, char *nomeArquivo, char **padroesD
     }
     else if(algoritmo == 3){
         while (fscanf(file, "%s", &DNA) != EOF){
-
+            algoritmoShiftAnd(similaridade, DNA, padroesDNA, arquivo);
         }
     }
     fclose(file);
@@ -244,7 +246,7 @@ void badCharHeuristic( char *str, int size, int badchar[NO_OF_CHARS]){
         badchar[(int) str[i]] = i;
     }
 }
- 
+
 int boyerMooreSearch( char *txt,  char *pat){
     int quantidadeOcorrencias = 0;
     int m = strlen(pat);
@@ -334,3 +336,40 @@ void computeLPSArray(char* pat, int M, int* lps){
 }
 
 //----------------------------------- Implementação do algoritimo Shift-And  -----------------------------------
+
+void algoritmoShiftAnd(Similaridade *similaridade, char *DNA, char **padroesDNA, int arquivo){
+    int i;
+    int quantidadeOcorrencias;
+    for(i = 0; i < similaridade->n; i++){
+        quantidadeOcorrencias = searchShiftAnd(DNA, padroesDNA[i]);
+        if(arquivo == 1){
+            similaridade->vetorA[i] += quantidadeOcorrencias;
+        }
+        else{
+            similaridade->vetorB[i] += quantidadeOcorrencias;
+        }
+    }
+}
+
+int searchShiftAnd(char *texto, char *padrao){
+    int quantidadeCasamento = 0;
+    int tamanhoPadrao = strlen(padrao);
+    int tamanhoTexto = strlen(texto);
+    if (tamanhoPadrao > tamanhoTexto)     // se padrao > texto retorna pra main sem casamentos
+        return 0;
+
+    int M[NO_OF_CHARS], R = 0;
+    for (int i = 0; i < NO_OF_CHARS; i++)       // pré - processamento
+        M[i] = 0;
+    for (int i = 1; i <= tamanhoPadrao; i++)
+        M[padrao[i-1] + 127] |= 1 << (tamanhoPadrao - i);
+    for (int i = 0; i < tamanhoTexto; i++) {              // busca pelo padrão no texto
+        R = ((R >> 1) | (1 << (tamanhoPadrao - 1))) & M[texto[i] + 127];
+        if ((R & 1) != 0){
+        if (i - tamanhoPadrao + 2 > 0)  // encontrou
+            quantidadeCasamento++;
+        }
+    }
+
+    return quantidadeCasamento;
+}
